@@ -1,222 +1,500 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>South America 2026</title>
+    <title>南美大冒險 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1; /* Indigo */
-            --bg: #f3f4f6;
+            --primary-color: #d97b56; /* 冒險橙色 */
+            --secondary-color: #2c3e50; /* 深藍色 */
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
-            --text: #1f2937;
+            --text-color: #333;
+            --light-text: #888;
+            --tag-bg-flight: #e3f2fd; --tag-text-flight: #1976d2;
+            --tag-bg-stay: #f3e5f5; --tag-text-stay: #7b1fa2;
+            --tag-bg-activity: #e8f5e9; --tag-text-activity: #388e3c;
+            --tag-bg-transport: #fff3e0; --tag-text-transport: #f57c00;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
+            background-color: var(--bg-color);
             margin: 0;
-            padding: 20px;
-            color: var(--text);
-            max-width: 600px;
-            margin: 0 auto; /* Center on desktop */
+            padding: 0;
+            color: var(--text-color);
+            padding-bottom: 90px;
         }
-        h1 { text-align: center; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #6b7280; font-size: 0.9em; margin-bottom: 20px; }
-        
-        /* Filter Tabs */
-        .tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
-        .tab { 
-            background: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9em; white-space: nowrap; 
-            border: 1px solid #e5e7eb; cursor: pointer;
-        }
-        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Timeline & Cards */
-        .timeline-date {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-weight: 800;
-            font-size: 1.1em;
-            color: #374151;
+        /* Banner */
+        .banner {
+            position: relative;
+            height: 220px;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2076&auto=format&fit=crop'); /* 替換為南美圖片 */
+            background-size: cover;
+            background-position: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            color: white;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .banner h1 { margin: 0; font-size: 28px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .trip-subtitle { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
+        .currency-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            margin-top: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Date Tabs */
+        .date-tabs-container {
             position: sticky;
             top: 0;
-            background-color: var(--bg);
+            background: var(--bg-color);
+            z-index: 100;
             padding: 10px 0;
-            z-index: 10;
+            box-shadow: 0 4px 10px -5px rgba(0,0,0,0.1);
         }
-
-        .card {
+        .date-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 16px;
+            gap: 10px;
+            scrollbar-width: none;
+        }
+        .date-tabs::-webkit-scrollbar { display: none; }
+        .date-tab {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 10px 18px;
+            text-align: center;
+            min-width: 60px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .date-tab.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(217, 123, 86, 0.3);
+        }
+        .date-tab .day { font-size: 12px; margin-bottom: 2px; opacity: 0.8; }
+        .date-tab .date { font-weight: bold; font-size: 16px; }
+
+        /* Timeline */
+        .day-header {
+            margin: 24px 20px 10px;
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--secondary-color);
             display: flex;
             align-items: center;
-            gap: 15px;
-            transition: transform 0.1s;
         }
-        .card:active { transform: scale(0.98); }
+        .day-header::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background: var(--primary-color);
+            margin-right: 10px;
+            border-radius: 2px;
+        }
 
-        .icon-box {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
+        .timeline-item {
+            display: flex;
+            margin: 0 16px 16px;
+        }
+        .timeline-time {
+            min-width: 50px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--light-text);
+            padding-top: 14px;
+            text-align: right;
+            margin-right: 12px;
+        }
+        .activity-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 16px;
+            flex-grow: 1;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: relative;
+            border-left: 4px solid transparent;
+        }
+        /* Card Types */
+        .type-flight { border-left-color: var(--tag-text-flight); }
+        .type-stay { border-left-color: var(--tag-text-stay); }
+        .type-activity { border-left-color: var(--tag-text-activity); }
+        .type-transport { border-left-color: var(--tag-text-transport); }
+
+        .activity-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+        .tag-flight { background: var(--tag-bg-flight); color: var(--tag-text-flight); }
+        .tag-stay { background: var(--tag-bg-stay); color: var(--tag-text-stay); }
+        .tag-activity { background: var(--tag-bg-activity); color: var(--tag-text-activity); }
+        .tag-transport { background: var(--tag-bg-transport); color: var(--tag-text-transport); }
+
+        .activity-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; color: var(--text-color); }
+        .activity-desc { font-size: 13px; color: var(--light-text); line-height: 1.4; }
+        .activity-cost {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: #fff5eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Bookings Page Styles */
+        .flight-card {
+            background: white;
+            border-radius: 16px;
+            margin: 16px;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+            display: flex;
+        }
+        .flight-info { padding: 16px; flex-grow: 1; }
+        .flight-header-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .airline { font-weight: bold; color: var(--secondary-color); display: flex; align-items: center; gap: 6px; }
+        .flight-route-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .airport-code { font-size: 24px; font-weight: 800; color: var(--secondary-color); }
+        .flight-line { flex-grow: 1; height: 1px; background: #ddd; margin: 0 10px; position: relative; }
+        .flight-line i { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); color: #ccc; font-size: 14px; }
+        .flight-time-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--light-text); }
+        .flight-pass {
+            width: 50px;
+            background: #f8f9fa;
+            border-left: 2px dashed #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2em;
-            flex-shrink: 0;
+            flex-direction: column;
+            color: #aaa;
+            font-size: 11px;
         }
 
-        /* Type Colors */
-        .type-flight { background-color: #dbeafe; color: #1e40af; } /* Blue */
-        .type-stay { background-color: #fae8ff; color: #86198f; }   /* Purple */
-        .type-activity { background-color: #dcfce7; color: #166534; } /* Green */
-        .type-transport { background-color: #ffedd5; color: #9a3412; } /* Orange */
-
-        .content { flex-grow: 1; }
-        .time { font-size: 0.8em; color: #6b7280; font-weight: 600; }
-        .title { font-size: 1em; font-weight: 700; margin: 2px 0; }
-        .location { font-size: 0.85em; color: #4b5563; }
-        .note { font-size: 0.8em; color: #ef4444; margin-top: 4px; font-style: italic;}
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 20px; /* Safe area for iPhone */
+            border-top: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+        .nav-item { text-align: center; color: #aaa; font-size: 11px; cursor: pointer; transition: color 0.2s; }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-item i { display: block; font-size: 20px; margin-bottom: 4px; }
         
-        .cost-badge {
-            font-size: 0.75em;
-            background: #f3f4f6;
-            padding: 4px 8px;
-            border-radius: 6px;
-            color: #4b5563;
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(217, 123, 86, 0.4);
+            z-index: 900;
         }
 
+        /* Utils */
+        .page { display: none; }
+        .page.active { display: block; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <h1>South America 2026</h1>
-    <div class="subtitle">88 Days • 4 Pax • Grand Adventure</div>
+    <div id="itinerary-page" class="page active">
+        <div class="banner">
+            <div class="trip-subtitle">88 Days Adventure</div>
+            <h1>South America 2026</h1>
+            <div class="currency-badge">
+                <i class="fas fa-globe-americas"></i> MXN • BRL • USD
+            </div>
+        </div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="filter('all')">All</div>
-        <div class="tab" onclick="filter('flight')">✈️ Flights</div>
-        <div class="tab" onclick="filter('stay')">🏨 Stays</div>
-        <div class="tab" onclick="filter('activity')">📸 Activities</div>
+        <div class="date-tabs-container">
+            <div class="date-tabs" id="dateTabs">
+                </div>
+        </div>
+
+        <div id="itinerary-content" style="padding-bottom: 20px;">
+            </div>
     </div>
 
-    <div id="app"></div>
+    <div id="bookings-page" class="page">
+        <div style="padding: 20px 20px 10px;">
+            <h2 style="margin:0; color:var(--secondary-color);">我的預訂</h2>
+        </div>
+        
+        <div style="display:flex; gap:10px; padding:0 20px 10px;">
+            <span style="background:var(--secondary-color); color:white; padding:6px 12px; border-radius:15px; font-size:13px;">全部</span>
+            <span style="background:white; color:#888; padding:6px 12px; border-radius:15px; font-size:13px; border:1px solid #eee;">機票</span>
+            <span style="background:white; color:#888; padding:6px 12px; border-radius:15px; font-size:13px; border:1px solid #eee;">住宿</span>
+        </div>
+
+        <div id="bookings-content">
+            </div>
+    </div>
+
+    <div class="fab"><i class="fas fa-plus"></i></div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchPage('itinerary')">
+            <i class="fas fa-calendar-alt"></i>行程
+        </div>
+        <div class="nav-item" onclick="switchPage('bookings')">
+            <i class="fas fa-ticket-alt"></i>預訂
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-calculator"></i>匯率
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-wallet"></i>記帳
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-users"></i>成員
+        </div>
+    </div>
 
 <script>
-    // --- YOUR ITINERARY DATA ---
-    const tripData = [
-        // MEXICO LEG
-        { date: "2026-01-28", time: "14:00", title: "Arrive Loreto (LTO) & Pick up Car", location: "Loreto", type: "transport", icon: "🚗", note: "Alamo Car Rental booked ($540)" },
-        { date: "2026-01-28", time: "18:00", title: "Check-in: Lighthouse Guest House", location: "Adolfo López Mateos", type: "stay", icon: "🏨", note: "Stay 2 nights (Not booked)" },
-        { date: "2026-01-29", time: "08:00", title: "Private Boat: Grey Whales", location: "Adolfo López Mateos", type: "activity", icon: "🐳", note: "Booked ($4400)" },
-        { date: "2026-01-30", time: "13:00", title: "Drive to La Paz", location: "Baja California Sur", type: "transport", icon: "🚗", note: "" },
-        { date: "2026-01-30", time: "18:00", title: "Check-in: Courtyard Marriott", location: "La Paz", type: "stay", icon: "🏨", note: "Stay 2 nights" },
-        { date: "2026-01-31", time: "07:00", title: "Swim with Whale Sharks", location: "La Paz", type: "activity", icon: "🦈", note: "Early morning" },
+    // ============================================
+    // 1. 你的資料庫 (在這裡修改所有資料！)
+    // ============================================
+    
+    // 行程資料 (請根據 PDF 內容在這裡新增/修改)
+    const itineraryData = [
+        // --- 墨西哥 (Mexico) ---
+        { date: "2026-01-28", time: "14:00", title: "抵達 Loreto & 取車", type: "transport", tag: "交通", cost: "$540", desc: "Alamo 租車，前往灰鯨村 (Adolfo López Mateos)" },
+        { date: "2026-01-28", time: "18:00", title: "Check-in: Lighthouse Guest House", type: "stay", tag: "住宿", cost: "", desc: "住 2 晚 (未 Book)" },
+        { date: "2026-01-29", time: "08:00", title: "私人包船看灰鯨", type: "activity", tag: "活動", cost: "$4400", desc: "近距離接觸灰鯨 (4人 Max)" },
+        { date: "2026-01-30", time: "13:00", title: "駕車前往 La Paz", type: "transport", tag: "交通", cost: "", desc: "下午出發" },
+        { date: "2026-01-31", time: "07:00", title: "與鯨鯊共游", type: "activity", tag: "活動", cost: "$3200", desc: "La Paz 早晨活動" },
+        { date: "2026-02-01", time: "08:25", title: "飛往 墨西哥城 (MEX)", type: "flight", tag: "飛行", cost: "$1388", desc: "AM 363 (08:25-11:45)" },
+        { date: "2026-02-01", time: "14:00", title: "Check-in: Hotel Geneve", type: "stay", tag: "住宿", cost: "", desc: "漫步 Roma 區" },
+        { date: "2026-02-04", time: "09:00", title: "特奧蒂瓦坎金字塔", type: "activity", tag: "景點", cost: "", desc: "Teotihuacan Pyramids" },
+        { date: "2026-02-07", time: "09:00", title: "帝王蝶保護區", type: "activity", tag: "世界奇觀", cost: "", desc: "El Rosario (騎馬上山)" },
         
-        // MEXICO CITY
-        { date: "2026-02-01", time: "08:25", title: "Flight to Mexico City", location: "LTO -> MEX", type: "flight", icon: "✈️", note: "AM 363" },
-        { date: "2026-02-01", time: "14:00", title: "Check-in: Hotel Geneve", location: "Mexico City (Roma)", type: "stay", icon: "🏨", note: "Stay 5 nights" },
-        { date: "2026-02-02", time: "10:00", title: "Anthropology Museum", location: "Mexico City", type: "activity", icon: "🏛️", note: "Voladores show outside" },
-        { date: "2026-02-04", time: "09:00", title: "Teotihuacan Pyramids", location: "Teotihuacan", type: "activity", icon: "🔺", note: "" },
+        // --- 巴西 (Brazil) ---
+        { date: "2026-02-15", time: "12:35", title: "飛往 聖保羅 (GRU)", type: "flight", tag: "長途飛行", cost: "", desc: "AA264 (MIA 轉機)" },
+        { date: "2026-02-16", time: "11:35", title: "飛往 Bonito", type: "flight", tag: "飛行", cost: "$536", desc: "LA3886" },
+        { date: "2026-02-17", time: "09:00", title: "Rio Sucuri 漂流浮潛", type: "activity", tag: "生態遊", cost: "", desc: "尋找森蚺/彩魚" },
+        { date: "2026-02-21", time: "20:00", title: "嘉年華冠軍遊行", type: "activity", tag: "盛事", cost: "", desc: "Rio Sambadrome (Sector 4)" },
         
-        // BUTTERFLY MIGRATION
-        { date: "2026-02-06", time: "10:00", title: "Drive to Angangueo", location: "Butterfly Valley", type: "transport", icon: "🚗", note: "Rent car again" },
-        { date: "2026-02-07", time: "09:00", title: "El Rosario Sanctuary", location: "Monarch Reserve", type: "activity", icon: "🦋", note: "Horse riding up" },
-        { date: "2026-02-08", time: "18:00", title: "Check-in: El Santuario Resort", location: "Valle de Bravo", type: "stay", icon: "🏨", note: "Luxury stay" },
-
-        // PUEBLA LEG
-        { date: "2026-02-10", time: "09:00", title: "Drive to Puebla via Toluca", location: "Toluca/Puebla", type: "transport", icon: "🚗", note: "See Stained Glass Garden" },
-        { date: "2026-02-15", time: "08:00", title: "Drive to MEX Airport", location: "Mexico City", type: "transport", icon: "🚗", note: "CRITICAL DAY" },
+        // --- 亞馬遜 (Amazon) ---
+        { date: "2026-02-24", time: "08:00", title: "進入 亞馬遜雨林", type: "activity", tag: "探險", cost: "", desc: "Lodge Day 1: 沒訊號" },
         
-        // BRAZIL LEG
-        { date: "2026-02-15", time: "12:35", title: "Flight to Sao Paulo", location: "MEX -> GRU", type: "flight", icon: "✈️", note: "AA264 via Miami" },
-        { date: "2026-02-16", time: "11:35", title: "Flight to Bonito", location: "GRU -> CGR", type: "flight", icon: "✈️", note: "Eco-tour start" },
-        { date: "2026-02-17", time: "09:00", title: "Rio Sucuri Snorkeling", location: "Bonito", type: "activity", icon: "🐠", note: "Floating river" },
-        { date: "2026-02-19", time: "14:50", title: "Flight to Rio", location: "CGR -> GIG", type: "flight", icon: "✈️", note: "Carnival Week!" },
-        { date: "2026-02-21", time: "20:00", title: "Carnival Champions Parade", location: "Sambadrome", type: "activity", icon: "💃", note: "Sector 4 Seats" },
-
-        // AMAZON LEG
-        { date: "2026-02-23", time: "09:40", title: "Flight to Manaus", location: "GIG -> MAO", type: "flight", icon: "✈️", note: "Into the Jungle" },
-        { date: "2026-02-24", time: "08:00", title: "Amazon Lodge Day 1", location: "Amazon Rainforest", type: "activity", icon: "🌳", note: "No signal" },
-
-        // COSTA RICA
-        { date: "2026-03-01", time: "03:35", title: "Flight to San Jose", location: "MAO -> SJO", type: "flight", icon: "✈️", note: "Overnight flight" },
-        { date: "2026-03-04", time: "08:00", title: "Search for Quetzal Bird", location: "Dota Cloud Forest", type: "activity", icon: "🦜", note: "" },
-
-        // GALAPAGOS
-        { date: "2026-03-08", time: "11:10", title: "Flight to Galapagos", location: "UIO -> GPS", type: "flight", icon: "✈️", note: "Cruise starts tomorrow" },
-        { date: "2026-03-09", time: "10:00", title: "Board Legend Cruise", location: "Galapagos", type: "activity", icon: "🚢", note: "7 Nights on boat" },
-
-        // EASTER ISLAND & PATAGONIA
-        { date: "2026-03-20", time: "08:35", title: "Flight to Easter Island", location: "SCL -> IPC", type: "flight", icon: "✈️", note: "Bucket List" },
-        { date: "2026-03-21", time: "09:00", title: "Moai Statues Tour", location: "Tongariki", type: "activity", icon: "🗿", note: "Sunrise" },
-        { date: "2026-03-26", time: "06:50", title: "Flight to Iguazu Falls", location: "SCL -> IGU", type: "flight", icon: "✈️", note: "Direct JetSmart flight" },
-        { date: "2026-03-29", time: "09:00", title: "Devil's Throat Walk", location: "Argentina Side", type: "activity", icon: "🌊", note: "Wet adventure" },
+        // --- 復活節島 (Easter Island) ---
+        { date: "2026-03-20", time: "08:35", title: "飛往 復活節島", type: "flight", tag: "飛行", cost: "$1695", desc: "SCL -> IPC (LA841)" },
+        { date: "2026-03-21", time: "09:00", title: "摩艾石像日出", type: "activity", tag: "打卡", cost: "", desc: "Tongariki" },
         
-        // HOME
-        { date: "2026-04-02", time: "21:00", title: "Flight Home", location: "GRU -> YUL", type: "flight", icon: "✈️", note: "Trip End" }
+        // --- 伊瓜蘇 (Iguazu) ---
+        { date: "2026-03-26", time: "06:50", title: "飛往 伊瓜蘇", type: "flight", tag: "關鍵直航", cost: "$874", desc: "JetSmart JA780" },
+        { date: "2026-03-29", time: "09:00", title: "魔鬼咽喉步道", type: "activity", tag: "景點", cost: "", desc: "阿根廷側" }
     ];
 
-    // --- RENDER FUNCTION ---
-    function render(filterType) {
-        const app = document.getElementById('app');
-        app.innerHTML = ''; // Clear existing
+    // 預訂資料
+    const bookingsData = [
+        { type: "flight", airline: "Aeromexico", code: "AM 363", from: "LTO", to: "MEX", date: "01 Feb", time: "08:25 - 11:45" },
+        { type: "flight", airline: "American", code: "AA 264", from: "MEX", to: "GRU", date: "15 Feb", time: "12:35 - 06:20(+1)" },
+        { type: "flight", airline: "LATAM", code: "LA 3886", from: "GRU", to: "CGR", date: "16 Feb", time: "11:35 - 12:20" },
+        { type: "flight", airline: "LATAM", code: "LA 841", from: "SCL", to: "IPC", date: "20 Mar", time: "08:35 - 12:00" },
+        { type: "hotel", name: "Hotel Geneve", loc: "Mexico City", date: "01-06 Feb", desc: "5 Nights" },
+        { type: "hotel", name: "El Santuario", loc: "Valle de Bravo", date: "08-10 Feb", desc: "Luxury Resort" }
+    ];
+
+    // ============================================
+    // 2. 自動生成邏輯 (不用動)
+    // ============================================
+
+    // 生成日期 Tabs (從 1月28日 到 4月2日)
+    function generateDateTabs() {
+        const container = document.getElementById('dateTabs');
+        const startDate = new Date('2026-01-28');
+        const endDate = new Date('2026-04-02');
         
-        let lastDate = '';
+        let currentDate = startDate;
+        const days = ['週日','週一','週二','週三','週四','週五','週六'];
 
-        tripData.forEach(item => {
-            // Filter Logic
-            if (filterType !== 'all' && item.type !== filterType && !(filterType === 'flight' && item.type === 'flight')) return;
+        while (currentDate <= endDate) {
+            const dateStr = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
+            const dayName = days[currentDate.getDay()];
+            const displayDate = `${currentDate.getDate()}/${currentDate.getMonth()+1}`;
 
-            // Render Date Header if new day
-            if (item.date !== lastDate) {
+            const tab = document.createElement('div');
+            tab.className = 'date-tab';
+            tab.onclick = () => scrollToDate(dateStr);
+            tab.id = `tab-${dateStr}`;
+            tab.innerHTML = `<div class="day">${dayName}</div><div class="date">${displayDate}</div>`;
+            
+            container.appendChild(tab);
+            
+            // 加一天
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        // 預設激活第一個
+        document.getElementById('tab-2026-01-28').classList.add('active');
+    }
+
+    // 渲染行程表
+    function renderItinerary() {
+        const container = document.getElementById('itinerary-content');
+        let currentHeaderDate = '';
+
+        // 按日期排序 (保險起見)
+        itineraryData.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+        itineraryData.forEach(item => {
+            // 如果是新的一天，加入日期標題 (Anchor)
+            if (item.date !== currentHeaderDate) {
                 const dateObj = new Date(item.date);
-                const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-                const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                
                 const dateHeader = document.createElement('div');
-                dateHeader.className = 'timeline-date';
-                dateHeader.innerText = `${dayName}, ${dateStr}`;
-                app.appendChild(dateHeader);
-                lastDate = item.date;
+                dateHeader.className = 'day-header';
+                dateHeader.id = `date-${item.date}`; // Anchor ID
+                dateHeader.innerText = `${item.date} ${dateObj.toLocaleDateString('zh-Hant', {weekday:'long'})}`;
+                container.appendChild(dateHeader);
+                currentHeaderDate = item.date;
             }
 
-            // Render Card
+            // 渲染卡片
             const card = document.createElement('div');
-            card.className = 'card';
+            card.className = 'timeline-item';
             
-            // Icon Background Color
-            let typeClass = 'type-activity';
-            if (item.type === 'flight') typeClass = 'type-flight';
-            if (item.type === 'stay') typeClass = 'type-stay';
-            if (item.type === 'transport') typeClass = 'type-transport';
+            let tagClass = 'tag-activity';
+            let borderClass = 'type-activity';
+            if(item.type === 'flight') { tagClass = 'tag-flight'; borderClass = 'type-flight'; }
+            if(item.type === 'stay') { tagClass = 'tag-stay'; borderClass = 'type-stay'; }
+            if(item.type === 'transport') { tagClass = 'tag-transport'; borderClass = 'type-transport'; }
 
             card.innerHTML = `
-                <div class="icon-box ${typeClass}">${item.icon}</div>
-                <div class="content">
-                    <div class="time">${item.time}</div>
-                    <div class="title">${item.title}</div>
-                    <div class="location">📍 ${item.location}</div>
-                    ${item.note ? `<div class="note">${item.note}</div>` : ''}
+                <div class="timeline-time">${item.time}</div>
+                <div class="activity-card ${borderClass}">
+                    ${item.cost ? `<div class="activity-cost">${item.cost}</div>` : ''}
+                    <span class="activity-tag ${tagClass}">${item.tag}</span>
+                    <div class="activity-title">${item.title}</div>
+                    <div class="activity-desc">${item.desc}</div>
                 </div>
             `;
-            app.appendChild(card);
+            container.appendChild(card);
         });
     }
 
-    // Filter Buttons Logic
-    function filter(type) {
-        render(type);
-        // Update active button state
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        event.target.classList.add('active');
+    // 渲染預訂頁
+    function renderBookings() {
+        const container = document.getElementById('bookings-content');
+        bookingsData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'flight-card';
+
+            if (item.type === 'flight') {
+                card.innerHTML = `
+                    <div class="flight-info">
+                        <div class="flight-header-row">
+                            <div class="airline"><i class="fas fa-plane"></i> ${item.airline}</div>
+                            <div style="font-weight:bold;">${item.code}</div>
+                        </div>
+                        <div class="flight-route-row">
+                            <div class="airport-code">${item.from}</div>
+                            <div class="flight-line"><i class="fas fa-plane"></i></div>
+                            <div class="airport-code">${item.to}</div>
+                        </div>
+                        <div class="flight-time-row">
+                            <div>${item.date}</div>
+                            <div>${item.time}</div>
+                        </div>
+                    </div>
+                    <div class="flight-pass">
+                        <i class="fas fa-qrcode" style="font-size:24px; margin-bottom:4px;"></i>
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="flight-info">
+                        <div class="flight-header-row">
+                            <div class="airline" style="color:#7b1fa2;"><i class="fas fa-hotel"></i> ${item.name}</div>
+                        </div>
+                        <div style="font-size:14px; margin-bottom:4px;">📍 ${item.loc}</div>
+                        <div style="font-size:12px; color:#888;">${item.date} • ${item.desc}</div>
+                    </div>
+                    <div class="flight-pass">
+                         <i class="fas fa-bed" style="font-size:20px;"></i>
+                    </div>
+                `;
+            }
+            container.appendChild(card);
+        });
     }
 
-    // Initial Render
-    render('all');
+    // 頁面滾動邏輯
+    function scrollToDate(dateStr) {
+        // 更新 Tab 狀態
+        document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
+        const tab = document.getElementById(`tab-${dateStr}`);
+        if(tab) tab.classList.add('active');
+
+        // 滾動到對應的日期標題
+        const element = document.getElementById(`date-${dateStr}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 因為有 Sticky Header，需要向下調整一點
+            window.scrollBy(0, -180); 
+        }
+    }
+
+    // 頁面切換
+    function switchPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId + '-page').classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        // 簡單判定 Active 狀態
+        const navIndex = pageId === 'itinerary' ? 0 : 1;
+        document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+    }
+
+    // 初始化
+    generateDateTabs();
+    renderItinerary();
+    renderBookings();
 
 </script>
 </body>
