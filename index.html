@@ -2,21 +2,17 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>南美大冒險 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #d97b56; /* 冒險橙色 */
-            --secondary-color: #2c3e50; /* 深藍色 */
+            --primary-color: #d97b56;
+            --secondary-color: #2c3e50;
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-color: #333;
             --light-text: #888;
-            --tag-bg-flight: #e3f2fd; --tag-text-flight: #1976d2;
-            --tag-bg-stay: #f3e5f5; --tag-text-stay: #7b1fa2;
-            --tag-bg-activity: #e8f5e9; --tag-text-activity: #388e3c;
-            --tag-bg-transport: #fff3e0; --tag-text-transport: #f57c00;
         }
 
         body {
@@ -28,76 +24,62 @@
             padding-bottom: 90px;
         }
 
-        /* Banner */
+        /* Banner & Tabs (Fixed Top) */
+        .top-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--bg-color);
+        }
+
         .banner {
-            position: relative;
-            height: 220px;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2076&auto=format&fit=crop'); /* 替換為南美圖片 */
+            height: 180px; /* 稍微縮小一點以留空間給內容 */
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2076');
             background-size: cover;
             background-position: center;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
             color: white;
-            padding: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .banner h1 { margin: 0; font-size: 28px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .trip-subtitle { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
-        .currency-badge {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            width: fit-content;
-            margin-top: 8px;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
+        .banner h1 { margin: 0; font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .trip-stats { font-size: 13px; opacity: 0.9; margin-top: 5px; display: flex; gap: 10px;}
 
-        /* Date Tabs */
-        .date-tabs-container {
-            position: sticky;
-            top: 0;
-            background: var(--bg-color);
-            z-index: 100;
-            padding: 10px 0;
-            box-shadow: 0 4px 10px -5px rgba(0,0,0,0.1);
-        }
         .date-tabs {
             display: flex;
             overflow-x: auto;
-            padding: 0 16px;
-            gap: 10px;
+            padding: 10px 16px;
+            gap: 8px;
+            background: var(--bg-color);
             scrollbar-width: none;
+            box-shadow: 0 4px 10px -5px rgba(0,0,0,0.1);
         }
         .date-tabs::-webkit-scrollbar { display: none; }
         .date-tab {
-            background: var(--card-bg);
-            border-radius: 14px;
-            padding: 10px 18px;
+            background: white;
+            border-radius: 12px;
+            padding: 8px 16px;
             text-align: center;
-            min-width: 60px;
+            min-width: 50px;
             flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-            cursor: pointer;
+            font-size: 14px;
+            color: #666;
             border: 1px solid transparent;
+            cursor: pointer;
         }
         .date-tab.active {
             background: var(--primary-color);
             color: white;
-            transform: translateY(-2px);
+            font-weight: bold;
             box-shadow: 0 4px 10px rgba(217, 123, 86, 0.3);
         }
-        .date-tab .day { font-size: 12px; margin-bottom: 2px; opacity: 0.8; }
-        .date-tab .date { font-weight: bold; font-size: 16px; }
+        .date-tab .day { font-size: 11px; margin-bottom: 2px; opacity: 0.8; }
 
-        /* Timeline */
+        /* Timeline Styles */
+        .day-anchor {
+            scroll-margin-top: 240px; /* 關鍵：這是修正跳轉不準確的設定 */
+        }
         .day-header {
             margin: 24px 20px 10px;
             font-weight: 800;
@@ -107,309 +89,219 @@
             align-items: center;
         }
         .day-header::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 18px;
-            background: var(--primary-color);
-            margin-right: 10px;
-            border-radius: 2px;
+            content: ''; width: 4px; height: 18px; background: var(--primary-color);
+            margin-right: 10px; border-radius: 2px;
         }
 
-        .timeline-item {
-            display: flex;
-            margin: 0 16px 16px;
-        }
-        .timeline-time {
-            min-width: 50px;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--light-text);
-            padding-top: 14px;
-            text-align: right;
-            margin-right: 12px;
-        }
+        .timeline-item { display: flex; margin: 0 16px 16px; }
+        .timeline-time { min-width: 45px; font-weight: 600; font-size: 13px; color: #999; padding-top: 14px; text-align: right; margin-right: 12px; }
         .activity-card {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 16px;
-            flex-grow: 1;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            position: relative;
-            border-left: 4px solid transparent;
+            background: white; border-radius: 16px; padding: 16px; flex-grow: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative;
+            border-left: 4px solid #eee;
         }
-        /* Card Types */
-        .type-flight { border-left-color: var(--tag-text-flight); }
-        .type-stay { border-left-color: var(--tag-text-stay); }
-        .type-activity { border-left-color: var(--tag-text-activity); }
-        .type-transport { border-left-color: var(--tag-text-transport); }
-
-        .activity-tag {
-            display: inline-block;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-        }
-        .tag-flight { background: var(--tag-bg-flight); color: var(--tag-text-flight); }
-        .tag-stay { background: var(--tag-bg-stay); color: var(--tag-text-stay); }
-        .tag-activity { background: var(--tag-bg-activity); color: var(--tag-text-activity); }
-        .tag-transport { background: var(--tag-bg-transport); color: var(--tag-text-transport); }
-
-        .activity-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; color: var(--text-color); }
-        .activity-desc { font-size: 13px; color: var(--light-text); line-height: 1.4; }
-        .activity-cost {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary-color);
-            background: #fff5eb;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        /* Bookings Page Styles */
-        .flight-card {
-            background: white;
-            border-radius: 16px;
-            margin: 16px;
-            padding: 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            overflow: hidden;
-            display: flex;
-        }
-        .flight-info { padding: 16px; flex-grow: 1; }
-        .flight-header-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        .airline { font-weight: bold; color: var(--secondary-color); display: flex; align-items: center; gap: 6px; }
-        .flight-route-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .airport-code { font-size: 24px; font-weight: 800; color: var(--secondary-color); }
-        .flight-line { flex-grow: 1; height: 1px; background: #ddd; margin: 0 10px; position: relative; }
-        .flight-line i { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); color: #ccc; font-size: 14px; }
-        .flight-time-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--light-text); }
-        .flight-pass {
-            width: 50px;
-            background: #f8f9fa;
-            border-left: 2px dashed #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            color: #aaa;
-            font-size: 11px;
-        }
-
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0 20px; /* Safe area for iPhone */
-            border-top: 1px solid rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-        .nav-item { text-align: center; color: #aaa; font-size: 11px; cursor: pointer; transition: color 0.2s; }
-        .nav-item.active { color: var(--primary-color); }
-        .nav-item i { display: block; font-size: 20px; margin-bottom: 4px; }
+        .type-flight { border-left-color: #2196f3; }
+        .type-stay { border-left-color: #9c27b0; }
+        .type-activity { border-left-color: #4caf50; }
         
-        .fab {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: var(--primary-color);
-            color: white;
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 4px 12px rgba(217, 123, 86, 0.4);
-            z-index: 900;
+        .activity-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+        .activity-desc { font-size: 13px; color: #666; }
+        .activity-cost {
+            position: absolute; top: 12px; right: 12px;
+            font-size: 12px; font-weight: bold; color: var(--primary-color);
+            background: #fff5eb; padding: 2px 6px; border-radius: 4px;
         }
 
-        /* Utils */
-        .page { display: none; }
+        /* Currency Page Styles */
+        .calc-container { padding: 20px; }
+        .calc-card {
+            background: white; border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;
+        }
+        .calc-title { font-size: 18px; font-weight: bold; color: var(--secondary-color); margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-label { font-size: 12px; color: #888; margin-bottom: 5px; display: block; }
+        
+        .currency-input {
+            width: 100%; box-sizing: border-box; padding: 12px; font-size: 24px;
+            border: 2px solid #eee; border-radius: 12px; outline: none; font-weight: bold;
+        }
+        .currency-input:focus { border-color: var(--primary-color); }
+        
+        .currency-select {
+            width: 100%; padding: 12px; font-size: 16px; margin-top: 10px;
+            border-radius: 12px; border: 1px solid #ddd; background: #f9f9f9;
+        }
+
+        .result-box {
+            background: #f0fdf4; border-radius: 16px; padding: 20px; margin-top: 20px;
+        }
+        .result-label { font-size: 13px; color: #166534; }
+        .result-amount { font-size: 32px; font-weight: 800; color: #166534; margin: 5px 0; }
+        .exchange-rate-display { font-size: 12px; color: #888; margin-top: 10px; }
+
+        /* Navigation */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.98);
+            border-top: 1px solid #eee; display: flex; justify-content: space-around;
+            padding: 10px 0 25px; z-index: 2000;
+        }
+        .nav-item { text-align: center; color: #bbb; font-size: 10px; cursor: pointer; }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-item i { display: block; font-size: 22px; margin-bottom: 4px; }
+
+        .fab {
+            position: fixed; bottom: 90px; right: 20px;
+            background: var(--primary-color); color: white;
+            width: 56px; height: 56px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; box-shadow: 0 4px 12px rgba(217, 123, 86, 0.4);
+            z-index: 1500; cursor: pointer; transition: transform 0.1s;
+        }
+        .fab:active { transform: scale(0.9); }
+
+        .page { display: none; padding-bottom: 20px; }
         .page.active { display: block; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
 
     <div id="itinerary-page" class="page active">
-        <div class="banner">
-            <div class="trip-subtitle">88 Days Adventure</div>
-            <h1>South America 2026</h1>
-            <div class="currency-badge">
-                <i class="fas fa-globe-americas"></i> MXN • BRL • USD
-            </div>
-        </div>
-
-        <div class="date-tabs-container">
-            <div class="date-tabs" id="dateTabs">
+        <div class="top-container">
+            <div class="banner">
+                <h1>South America 2026</h1>
+                <div class="trip-stats">
+                    <span><i class="fas fa-calendar"></i> 88 Days</span>
+                    <span><i class="fas fa-user-friends"></i> 4 Pax</span>
                 </div>
+            </div>
+            <div class="date-tabs" id="dateTabs"></div>
         </div>
 
-        <div id="itinerary-content" style="padding-bottom: 20px;">
+        <div id="itinerary-content">
             </div>
+    </div>
+
+    <div id="currency-page" class="page">
+        <div style="padding: 20px; background: white; border-bottom: 1px solid #eee;">
+            <h2 style="margin:0; color:var(--secondary-color);">匯率換算</h2>
+        </div>
+        
+        <div class="calc-container">
+            <div class="calc-card">
+                <div class="input-group">
+                    <label class="input-label">輸入當地金額</label>
+                    <input type="number" id="calcInput" class="currency-input" placeholder="0" oninput="calculate()">
+                    
+                    <select id="currencySelect" class="currency-select" onchange="calculate()">
+                        <option value="0.38">🇲🇽 墨西哥披索 (MXN)</option>
+                        <option value="1.35">🇧🇷 巴西雷亞爾 (BRL)</option>
+                        <option value="7.80">🇺🇸 美金 (USD)</option>
+                        <option value="0.008">🇨🇱 智利比索 (CLP)</option>
+                    </select>
+                </div>
+
+                <div class="result-box">
+                    <div class="result-label">等於港幣</div>
+                    <div class="result-amount">HK$ <span id="calcResult">0.00</span></div>
+                </div>
+
+                <div class="exchange-rate-display">
+                    參考匯率: 1 <span id="curName">MXN</span> ≈ HK$ <span id="curRate">0.38</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; color: #888; font-size: 12px; text-align: center;">
+                * 匯率僅供參考，實際扣款視乎銀行
+            </div>
+        </div>
     </div>
 
     <div id="bookings-page" class="page">
-        <div style="padding: 20px 20px 10px;">
-            <h2 style="margin:0; color:var(--secondary-color);">我的預訂</h2>
-        </div>
-        
-        <div style="display:flex; gap:10px; padding:0 20px 10px;">
-            <span style="background:var(--secondary-color); color:white; padding:6px 12px; border-radius:15px; font-size:13px;">全部</span>
-            <span style="background:white; color:#888; padding:6px 12px; border-radius:15px; font-size:13px; border:1px solid #eee;">機票</span>
-            <span style="background:white; color:#888; padding:6px 12px; border-radius:15px; font-size:13px; border:1px solid #eee;">住宿</span>
-        </div>
-
-        <div id="bookings-content">
-            </div>
+        <div style="padding: 20px;"><h2 style="color:#333">我的預訂</h2><p>這裡是預訂列表...</p></div>
     </div>
 
-    <div class="fab"><i class="fas fa-plus"></i></div>
+    <div class="fab" onclick="addNewItem()"><i class="fas fa-plus"></i></div>
 
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchPage('itinerary')">
-            <i class="fas fa-calendar-alt"></i>行程
+            <i class="fas fa-map-marked-alt"></i>行程
         </div>
         <div class="nav-item" onclick="switchPage('bookings')">
             <i class="fas fa-ticket-alt"></i>預訂
         </div>
-        <div class="nav-item">
+        <div class="nav-item" onclick="switchPage('currency')">
             <i class="fas fa-calculator"></i>匯率
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-wallet"></i>記帳
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-users"></i>成員
         </div>
     </div>
 
 <script>
-    // ============================================
-    // 1. 你的資料庫 (在這裡修改所有資料！)
-    // ============================================
-    
-    // 行程資料 (請根據 PDF 內容在這裡新增/修改)
-    const itineraryData = [
-        // --- 墨西哥 (Mexico) ---
-        { date: "2026-01-28", time: "14:00", title: "抵達 Loreto & 取車", type: "transport", tag: "交通", cost: "$540", desc: "Alamo 租車，前往灰鯨村 (Adolfo López Mateos)" },
-        { date: "2026-01-28", time: "18:00", title: "Check-in: Lighthouse Guest House", type: "stay", tag: "住宿", cost: "", desc: "住 2 晚 (未 Book)" },
-        { date: "2026-01-29", time: "08:00", title: "私人包船看灰鯨", type: "activity", tag: "活動", cost: "$4400", desc: "近距離接觸灰鯨 (4人 Max)" },
-        { date: "2026-01-30", time: "13:00", title: "駕車前往 La Paz", type: "transport", tag: "交通", cost: "", desc: "下午出發" },
-        { date: "2026-01-31", time: "07:00", title: "與鯨鯊共游", type: "activity", tag: "活動", cost: "$3200", desc: "La Paz 早晨活動" },
-        { date: "2026-02-01", time: "08:25", title: "飛往 墨西哥城 (MEX)", type: "flight", tag: "飛行", cost: "$1388", desc: "AM 363 (08:25-11:45)" },
-        { date: "2026-02-01", time: "14:00", title: "Check-in: Hotel Geneve", type: "stay", tag: "住宿", cost: "", desc: "漫步 Roma 區" },
-        { date: "2026-02-04", time: "09:00", title: "特奧蒂瓦坎金字塔", type: "activity", tag: "景點", cost: "", desc: "Teotihuacan Pyramids" },
-        { date: "2026-02-07", time: "09:00", title: "帝王蝶保護區", type: "activity", tag: "世界奇觀", cost: "", desc: "El Rosario (騎馬上山)" },
-        
-        // --- 巴西 (Brazil) ---
-        { date: "2026-02-15", time: "12:35", title: "飛往 聖保羅 (GRU)", type: "flight", tag: "長途飛行", cost: "", desc: "AA264 (MIA 轉機)" },
-        { date: "2026-02-16", time: "11:35", title: "飛往 Bonito", type: "flight", tag: "飛行", cost: "$536", desc: "LA3886" },
-        { date: "2026-02-17", time: "09:00", title: "Rio Sucuri 漂流浮潛", type: "activity", tag: "生態遊", cost: "", desc: "尋找森蚺/彩魚" },
-        { date: "2026-02-21", time: "20:00", title: "嘉年華冠軍遊行", type: "activity", tag: "盛事", cost: "", desc: "Rio Sambadrome (Sector 4)" },
-        
-        // --- 亞馬遜 (Amazon) ---
-        { date: "2026-02-24", time: "08:00", title: "進入 亞馬遜雨林", type: "activity", tag: "探險", cost: "", desc: "Lodge Day 1: 沒訊號" },
-        
-        // --- 復活節島 (Easter Island) ---
-        { date: "2026-03-20", time: "08:35", title: "飛往 復活節島", type: "flight", tag: "飛行", cost: "$1695", desc: "SCL -> IPC (LA841)" },
-        { date: "2026-03-21", time: "09:00", title: "摩艾石像日出", type: "activity", tag: "打卡", cost: "", desc: "Tongariki" },
-        
-        // --- 伊瓜蘇 (Iguazu) ---
-        { date: "2026-03-26", time: "06:50", title: "飛往 伊瓜蘇", type: "flight", tag: "關鍵直航", cost: "$874", desc: "JetSmart JA780" },
-        { date: "2026-03-29", time: "09:00", title: "魔鬼咽喉步道", type: "activity", tag: "景點", cost: "", desc: "阿根廷側" }
+    // 1. 資料庫 (可在此修改)
+    let itineraryData = [
+        { date: "2026-01-28", time: "14:00", title: "抵達 Loreto & 取車", type: "transport", cost: "$540", desc: "Alamo 租車" },
+        { date: "2026-01-29", time: "08:00", title: "私人包船看灰鯨", type: "activity", cost: "$4400", desc: "4人 Max" },
+        { date: "2026-02-01", time: "08:25", title: "飛往 墨西哥城", type: "flight", cost: "$1388", desc: "AM 363" },
+        { date: "2026-02-04", time: "09:00", title: "金字塔一日遊", type: "activity", cost: "", desc: "Teotihuacan" },
+        { date: "2026-02-15", time: "12:35", title: "飛往 聖保羅", type: "flight", cost: "", desc: "AA264" },
+        { date: "2026-03-26", time: "06:50", title: "飛往 伊瓜蘇", type: "flight", cost: "$874", desc: "JetSmart" }
     ];
 
-    // 預訂資料
-    const bookingsData = [
-        { type: "flight", airline: "Aeromexico", code: "AM 363", from: "LTO", to: "MEX", date: "01 Feb", time: "08:25 - 11:45" },
-        { type: "flight", airline: "American", code: "AA 264", from: "MEX", to: "GRU", date: "15 Feb", time: "12:35 - 06:20(+1)" },
-        { type: "flight", airline: "LATAM", code: "LA 3886", from: "GRU", to: "CGR", date: "16 Feb", time: "11:35 - 12:20" },
-        { type: "flight", airline: "LATAM", code: "LA 841", from: "SCL", to: "IPC", date: "20 Mar", time: "08:35 - 12:00" },
-        { type: "hotel", name: "Hotel Geneve", loc: "Mexico City", date: "01-06 Feb", desc: "5 Nights" },
-        { type: "hotel", name: "El Santuario", loc: "Valle de Bravo", date: "08-10 Feb", desc: "Luxury Resort" }
-    ];
-
-    // ============================================
-    // 2. 自動生成邏輯 (不用動)
-    // ============================================
-
-    // 生成日期 Tabs (從 1月28日 到 4月2日)
-    function generateDateTabs() {
-        const container = document.getElementById('dateTabs');
-        const startDate = new Date('2026-01-28');
-        const endDate = new Date('2026-04-02');
-        
-        let currentDate = startDate;
-        const days = ['週日','週一','週二','週三','週四','週五','週六'];
-
-        while (currentDate <= endDate) {
-            const dateStr = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD
-            const dayName = days[currentDate.getDay()];
-            const displayDate = `${currentDate.getDate()}/${currentDate.getMonth()+1}`;
-
-            const tab = document.createElement('div');
-            tab.className = 'date-tab';
-            tab.onclick = () => scrollToDate(dateStr);
-            tab.id = `tab-${dateStr}`;
-            tab.innerHTML = `<div class="day">${dayName}</div><div class="date">${displayDate}</div>`;
-            
-            container.appendChild(tab);
-            
-            // 加一天
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
-        // 預設激活第一個
-        document.getElementById('tab-2026-01-28').classList.add('active');
+    // 2. 初始化
+    function init() {
+        generateDateTabs();
+        renderItinerary();
     }
 
-    // 渲染行程表
+    // 生成日期按鈕
+    function generateDateTabs() {
+        const container = document.getElementById('dateTabs');
+        container.innerHTML = '';
+        const startDate = new Date('2026-01-28');
+        const endDate = new Date('2026-04-02');
+        let curr = startDate;
+
+        while (curr <= endDate) {
+            const dateStr = curr.toISOString().split('T')[0];
+            const displayDate = `${curr.getDate()}/${curr.getMonth()+1}`;
+            const tab = document.createElement('div');
+            tab.className = 'date-tab';
+            tab.innerText = displayDate;
+            tab.onclick = () => scrollToDate(dateStr, tab);
+            container.appendChild(tab);
+            curr.setDate(curr.getDate() + 1);
+        }
+    }
+
+    // 渲染行程 (支援新增內容)
     function renderItinerary() {
         const container = document.getElementById('itinerary-content');
-        let currentHeaderDate = '';
-
-        // 按日期排序 (保險起見)
-        itineraryData.sort((a,b) => new Date(a.date) - new Date(b.date));
+        container.innerHTML = '';
+        
+        // 按日期排序
+        itineraryData.sort((a,b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+        
+        let lastDate = '';
 
         itineraryData.forEach(item => {
-            // 如果是新的一天，加入日期標題 (Anchor)
-            if (item.date !== currentHeaderDate) {
-                const dateObj = new Date(item.date);
-                const dateHeader = document.createElement('div');
-                dateHeader.className = 'day-header';
-                dateHeader.id = `date-${item.date}`; // Anchor ID
-                dateHeader.innerText = `${item.date} ${dateObj.toLocaleDateString('zh-Hant', {weekday:'long'})}`;
-                container.appendChild(dateHeader);
-                currentHeaderDate = item.date;
+            if (item.date !== lastDate) {
+                const header = document.createElement('div');
+                header.className = 'day-header day-anchor'; // day-anchor 用於定位
+                header.id = `date-${item.date}`;
+                header.innerText = item.date;
+                container.appendChild(header);
+                lastDate = item.date;
             }
 
-            // 渲染卡片
+            let borderClass = 'type-activity';
+            if (item.type === 'flight') borderClass = 'type-flight';
+            if (item.type === 'stay') borderClass = 'type-stay';
+
             const card = document.createElement('div');
             card.className = 'timeline-item';
-            
-            let tagClass = 'tag-activity';
-            let borderClass = 'type-activity';
-            if(item.type === 'flight') { tagClass = 'tag-flight'; borderClass = 'type-flight'; }
-            if(item.type === 'stay') { tagClass = 'tag-stay'; borderClass = 'type-stay'; }
-            if(item.type === 'transport') { tagClass = 'tag-transport'; borderClass = 'type-transport'; }
-
             card.innerHTML = `
                 <div class="timeline-time">${item.time}</div>
                 <div class="activity-card ${borderClass}">
                     ${item.cost ? `<div class="activity-cost">${item.cost}</div>` : ''}
-                    <span class="activity-tag ${tagClass}">${item.tag}</span>
                     <div class="activity-title">${item.title}</div>
                     <div class="activity-desc">${item.desc}</div>
                 </div>
@@ -418,83 +310,86 @@
         });
     }
 
-    // 渲染預訂頁
-    function renderBookings() {
-        const container = document.getElementById('bookings-content');
-        bookingsData.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'flight-card';
-
-            if (item.type === 'flight') {
-                card.innerHTML = `
-                    <div class="flight-info">
-                        <div class="flight-header-row">
-                            <div class="airline"><i class="fas fa-plane"></i> ${item.airline}</div>
-                            <div style="font-weight:bold;">${item.code}</div>
-                        </div>
-                        <div class="flight-route-row">
-                            <div class="airport-code">${item.from}</div>
-                            <div class="flight-line"><i class="fas fa-plane"></i></div>
-                            <div class="airport-code">${item.to}</div>
-                        </div>
-                        <div class="flight-time-row">
-                            <div>${item.date}</div>
-                            <div>${item.time}</div>
-                        </div>
-                    </div>
-                    <div class="flight-pass">
-                        <i class="fas fa-qrcode" style="font-size:24px; margin-bottom:4px;"></i>
-                    </div>
-                `;
-            } else {
-                card.innerHTML = `
-                    <div class="flight-info">
-                        <div class="flight-header-row">
-                            <div class="airline" style="color:#7b1fa2;"><i class="fas fa-hotel"></i> ${item.name}</div>
-                        </div>
-                        <div style="font-size:14px; margin-bottom:4px;">📍 ${item.loc}</div>
-                        <div style="font-size:12px; color:#888;">${item.date} • ${item.desc}</div>
-                    </div>
-                    <div class="flight-pass">
-                         <i class="fas fa-bed" style="font-size:20px;"></i>
-                    </div>
-                `;
-            }
-            container.appendChild(card);
-        });
-    }
-
-    // 頁面滾動邏輯
-    function scrollToDate(dateStr) {
-        // 更新 Tab 狀態
+    // 3. 修正日期跳轉 (精準定位)
+    function scrollToDate(dateStr, tabElement) {
+        // 點擊高亮
         document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
-        const tab = document.getElementById(`tab-${dateStr}`);
-        if(tab) tab.classList.add('active');
+        if(tabElement) tabElement.classList.add('active');
 
-        // 滾動到對應的日期標題
         const element = document.getElementById(`date-${dateStr}`);
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // 因為有 Sticky Header，需要向下調整一點
-            window.scrollBy(0, -180); 
+            // 計算 Header 高度 (動態獲取)
+            const headerOffset = 250; 
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        } else {
+            alert("當天沒有行程！");
         }
     }
 
-    // 頁面切換
+    // 4. 新增行程 (+ 號功能)
+    function addNewItem() {
+        // 簡單的 Prompt 輸入 (因為沒有後台，這最簡單有效)
+        const title = prompt("請輸入活動名稱:", "吃大餐");
+        if (!title) return;
+        
+        const date = prompt("日期 (YYYY-MM-DD):", "2026-01-28");
+        const time = prompt("時間 (HH:MM):", "19:00");
+        const cost = prompt("費用 (選填):", "");
+
+        // 推入資料庫
+        itineraryData.push({
+            date: date,
+            time: time,
+            title: title,
+            type: "activity",
+            cost: cost ? `$${cost}` : "",
+            desc: "新增的項目"
+        });
+
+        // 重新渲染
+        renderItinerary();
+        
+        // 自動跳轉到新增的那一天
+        setTimeout(() => scrollToDate(date), 100);
+        
+        alert("新增成功！(注意：刷新頁面後會消失)");
+    }
+
+    // 5. 匯率計算機邏輯
+    function calculate() {
+        const amount = parseFloat(document.getElementById('calcInput').value) || 0;
+        const rate = parseFloat(document.getElementById('currencySelect').value);
+        const result = amount * rate;
+        
+        // 更新顯示
+        document.getElementById('calcResult').innerText = result.toFixed(2);
+        
+        // 更新參考匯率文字
+        const select = document.getElementById('currencySelect');
+        const curText = select.options[select.selectedIndex].text.split(' ')[1]; // 取得 (MXN)
+        document.getElementById('curName').innerText = curText;
+        document.getElementById('curRate').innerText = rate;
+    }
+
+    // 6. 頁面切換
     function switchPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId + '-page').classList.add('active');
         
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        // 簡單判定 Active 狀態
-        const navIndex = pageId === 'itinerary' ? 0 : 1;
-        document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+        
+        // 簡單切換 Active Class
+        const icons = document.querySelectorAll('.nav-item');
+        if(pageId === 'itinerary') icons[0].classList.add('active');
+        if(pageId === 'bookings') icons[1].classList.add('active');
+        if(pageId === 'currency') icons[2].classList.add('active');
     }
 
-    // 初始化
-    generateDateTabs();
-    renderItinerary();
-    renderBookings();
+    // 啟動 App
+    init();
 
 </script>
 </body>
