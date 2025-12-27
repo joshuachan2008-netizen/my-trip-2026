@@ -236,28 +236,142 @@
     </div>
 
 <script>
-    // 1. 資料庫 (可在此修改)
+    // ============================================
+    // 1. 更新後的詳細資料庫 (1月28日 - 4月2日)
+    // ============================================
+    
     let itineraryData = [
-        { date: "2026-01-28", time: "14:00", title: "抵達 Loreto & 取車", type: "transport", cost: "$540", desc: "Alamo 租車" },
-        { date: "2026-01-29", time: "08:00", title: "私人包船看灰鯨", type: "activity", cost: "$4400", desc: "4人 Max" },
-        { date: "2026-02-01", time: "08:25", title: "飛往 墨西哥城", type: "flight", cost: "$1388", desc: "AM 363" },
-        { date: "2026-02-04", time: "09:00", title: "金字塔一日遊", type: "activity", cost: "", desc: "Teotihuacan" },
-        { date: "2026-02-15", time: "12:35", title: "飛往 聖保羅", type: "flight", cost: "", desc: "AA264" },
-        { date: "2026-03-26", time: "06:50", title: "飛往 伊瓜蘇", type: "flight", cost: "$874", desc: "JetSmart" }
+        // --- 墨西哥 Baja California Sur ---
+        { date: "2026-01-28", time: "14:00", title: "抵達 Loreto (LTO)", type: "transport", cost: "$540", desc: "取車 (Alamo)，自駕前往灰鯨村 (Adolfo López Mateos)" },
+        { date: "2026-01-28", time: "18:00", title: "入住 Lighthouse Guest House", type: "stay", cost: "", desc: "灰鯨村 (住 2 晚) *未 book" },
+        { date: "2026-01-29", time: "08:00", title: "【私人包船】近距離接觸灰鯨", type: "activity", cost: "$4400", desc: "4 位 max (已 book)" },
+        { date: "2026-01-30", time: "08:00", title: "第二次觀鯨機會 / 休息", type: "activity", cost: "", desc: "早上自由活動" },
+        { date: "2026-01-30", time: "13:00", title: "駕車前往 La Paz", type: "transport", cost: "", desc: "下午出發" },
+        { date: "2026-01-30", time: "18:00", title: "入住 Courtyard by Marriott", type: "stay", cost: "", desc: "La Paz (住 2 晚) *未 book" },
+        { date: "2026-01-31", time: "07:00", title: "與鯨鯊共游 (Whale Shark)", type: "activity", cost: "$3200", desc: "4 位 max *未 book" },
+        { date: "2026-01-31", time: "13:30", title: "還車 & 休息", type: "transport", cost: "", desc: "La Paz 市內休息" },
+
+        // --- 墨西哥城 (Mexico City) ---
+        { date: "2026-02-01", time: "08:25", title: "飛往 墨西哥城 (MEX)", type: "flight", cost: "$1388", desc: "AM 363 (08:25-11:45)" },
+        { date: "2026-02-01", time: "14:00", title: "入住 Hotel Geneve", type: "stay", cost: "", desc: "Roma 區 (住 5 晚)" },
+        { date: "2026-02-01", time: "15:00", title: "漫步 Roma 區", type: "activity", cost: "", desc: "市區觀光" },
+        { date: "2026-02-02", time: "10:00", title: "人類學博物館 & 空中飛人", type: "activity", cost: "", desc: "Voladores de Papantla" },
+        { date: "2026-02-03", time: "10:00", title: "Xochimilco 運河 & 鬼娃島", type: "activity", cost: "", desc: "遊船體驗" },
+        { date: "2026-02-03", time: "19:00", title: "Lucha Libre (摔角)", type: "activity", cost: "", desc: "晚上觀看" },
+        { date: "2026-02-04", time: "09:00", title: "特奧蒂瓦坎 (Teotihuacan)", type: "activity", cost: "", desc: "太陽/月亮金字塔" },
+        { date: "2026-02-04", time: "14:00", title: "工藝品市集", type: "activity", cost: "", desc: "La Ciudadela" },
+        { date: "2026-02-04", time: "19:00", title: "芭蕾舞表演", type: "activity", cost: "", desc: "Bellas Artes" },
+        { date: "2026-02-05", time: "10:00", title: "Mercado de Jamaica (花市)", type: "activity", cost: "", desc: "& 2號線纜車體驗" },
+
+        // --- 蝴蝶谷 & 周邊 ---
+        { date: "2026-02-06", time: "10:00", title: "再次租車前往 Angangueo", type: "transport", cost: "", desc: "前往蝴蝶谷" },
+        { date: "2026-02-06", time: "16:00", title: "入住 Hotel Albergue Don Bruno", type: "stay", cost: "", desc: "*要 send email (住 2 晚)" },
+        { date: "2026-02-07", time: "09:00", title: "【世界奇觀】帝王蝶保護區", type: "activity", cost: "", desc: "El Rosario (騎馬上山)" },
+        { date: "2026-02-08", time: "09:00", title: "Sierra Chincua 蝴蝶區", type: "activity", cost: "", desc: "前往 Jungapeo 浸溫泉" },
+        { date: "2026-02-08", time: "18:00", title: "入住 El Santuario Resort", type: "stay", cost: "$13xx", desc: "Valle de Bravo (住 2 晚)" },
+        { date: "2026-02-09", time: "10:00", title: "Valle de Bravo 白色小鎮", type: "activity", cost: "", desc: "湖泊遊玩" },
+
+        // --- Puebla & 周邊 ---
+        { date: "2026-02-10", time: "09:00", title: "前往 Toluca & Metepec", type: "transport", cost: "", desc: "彩繪玻璃植物園 & 馬賽克樓梯" },
+        { date: "2026-02-10", time: "18:00", title: "入住 Puebla 酒店", type: "stay", cost: "", desc: "InterContinental 或 Quinta Real?" },
+        { date: "2026-02-11", time: "10:00", title: "Puebla 市中心深度遊", type: "activity", cost: "", desc: "圖書館、瓷器街" },
+        { date: "2026-02-12", time: "10:00", title: "Cholula 大教堂 & 空中飛人", type: "activity", cost: "", desc: "金字塔遺跡" },
+        { date: "2026-02-13", time: "10:00", title: "Atlixco 鮮花小鎮", type: "activity", cost: "", desc: "或在 Puebla 休息 (可還車)" },
+        { date: "2026-02-14", time: "10:00", title: "Huejotzingo 火槍節嘉年華", type: "activity", cost: "", desc: "嘉年華開幕" },
+
+        // --- 巴西 (Pantanal/Bonito) ---
+        { date: "2026-02-15", time: "08:00", title: "駕車回 MEX 機場還車", type: "transport", cost: "", desc: "【關鍵轉折日】" },
+        { date: "2026-02-15", time: "12:35", title: "飛往 聖保羅 (GRU)", type: "flight", cost: "", desc: "AA264 + AA929 (MIA 轉機)" },
+        { date: "2026-02-16", time: "06:20", title: "抵達 GRU 轉機", type: "transport", cost: "", desc: "等待轉機去 Bonito" },
+        { date: "2026-02-16", time: "11:35", title: "飛往 Bonito (CGR)", type: "flight", cost: "$536", desc: "LA3886 (再包車4小時)" },
+        { date: "2026-02-17", time: "09:00", title: "Rio Sucuri 漂流浮潛", type: "activity", cost: "", desc: "尋找森蚺/彩魚" },
+        { date: "2026-02-17", time: "18:00", title: "入住 Casa Guariroba", type: "stay", cost: "", desc: "Bonito 民宿" },
+        { date: "2026-02-18", time: "09:00", title: "Rio da Prata / Boca da Onça", type: "activity", cost: "", desc: "銀河漂流 或 瀑布健行 (2揀1)" },
+
+        // --- 巴西 (Rio de Janeiro) ---
+        { date: "2026-02-19", time: "14:50", title: "飛往 里約熱內盧 (GIG)", type: "flight", cost: "$1065", desc: "AD4247+AD4040 (VCP 轉機)" },
+        { date: "2026-02-19", time: "20:30", title: "抵達里約", type: "stay", cost: "", desc: "入住 BNB (住 4 晚)" },
+        { date: "2026-02-20", time: "09:00", title: "基督像 & 糖麵包山", type: "activity", cost: "", desc: "里約地標一日遊" },
+        { date: "2026-02-21", time: "10:00", title: "百年咖啡廳 & 黃色小火車", type: "activity", cost: "", desc: "Confeitaria Colombo" },
+        { date: "2026-02-21", time: "20:00", title: "嘉年華冠軍遊行", type: "activity", cost: "", desc: "Champions Parade (Sector 4)" },
+        { date: "2026-02-22", time: "10:00", title: "海灘漫步", type: "activity", cost: "", desc: "自然醒 / Copacabana" },
+
+        // --- 亞馬遜 (Amazon) ---
+        { date: "2026-02-23", time: "09:40", title: "飛往 瑪瑙斯 (MAO)", type: "flight", cost: "$1851", desc: "AD4028+AD4056" },
+        { date: "2026-02-24", time: "08:00", title: "進入亞馬遜 Lodge (Day 1)", type: "activity", cost: "", desc: "雨林探險開始" },
+        { date: "2026-02-25", time: "08:00", title: "亞馬遜探險 (Day 2)", type: "activity", cost: "", desc: "釣食人魚、象魚、夜間觀察" },
+        { date: "2026-02-26", time: "08:00", title: "亞馬遜探險 (Day 3)", type: "activity", cost: "", desc: "粉紅河豚、叢林徒步" },
+        { date: "2026-02-27", time: "08:00", title: "亞馬遜探險 (Day 4)", type: "activity", cost: "", desc: "日出、原住民探訪" },
+        { date: "2026-02-28", time: "12:00", title: "返回瑪瑙斯市內", type: "transport", cost: "", desc: "市內休息，等凌晨機" },
+
+        // --- 哥斯達黎加 (Costa Rica) ---
+        { date: "2026-03-01", time: "03:35", title: "飛往 聖荷西 (SJO)", type: "flight", cost: "$1602", desc: "CM140 (PTY 轉機)" },
+        { date: "2026-03-01", time: "10:00", title: "前往 Arenal 火山", type: "transport", cost: "", desc: "La Fortuna 溫泉" },
+        { date: "2026-03-02", time: "09:00", title: "Rio Celeste 藍河健行", type: "activity", cost: "", desc: "*記得租雨靴 & 看樹懶" },
+        { date: "2026-03-03", time: "09:00", title: "前往 San Gerardo de Dota", type: "transport", cost: "", desc: "雲霧林" },
+        { date: "2026-03-04", time: "08:00", title: "尋找鳳尾綠咬鵑", type: "activity", cost: "", desc: "餵蜂鳥" },
+        { date: "2026-03-05", time: "08:00", title: "尋找鳳尾綠咬鵑 (Day 2)", type: "activity", cost: "", desc: "生態攝影" },
+        { date: "2026-03-06", time: "16:45", title: "飛往 基多 (UIO)", type: "flight", cost: "$964", desc: "AV647" },
+
+        // --- 加拉帕戈斯 (Galapagos) ---
+        { date: "2026-03-07", time: "10:00", title: "基多 (Quito) 休整", type: "activity", cost: "", desc: "適應高度" },
+        { date: "2026-03-08", time: "11:10", title: "飛往 加拉帕戈斯 (GPS)", type: "flight", cost: "$987", desc: "AV1688" },
+        { date: "2026-03-09", time: "10:00", title: "Legend 郵輪 (上船)", type: "activity", cost: "", desc: "7晚 郵輪之旅" },
+        { date: "2026-03-16", time: "08:00", title: "Legend 郵輪 (下船)", type: "activity", cost: "", desc: "主島休息" },
+        { date: "2026-03-18", time: "11:40", title: "飛往 瓜亞基爾 (GYE)", type: "flight", cost: "$1136", desc: "AV1633" },
+
+        // --- 復活節島 (Easter Island) ---
+        { date: "2026-03-19", time: "09:05", title: "飛往 聖地牙哥 (SCL)", type: "flight", cost: "$2050", desc: "LA1430+LA651 (LIM 轉機)" },
+        { date: "2026-03-20", time: "08:35", title: "飛往 復活節島 (IPC)", type: "flight", cost: "$1695", desc: "LA841" },
+        { date: "2026-03-21", time: "09:00", title: "復活節島深度遊 (Day 1)", type: "activity", cost: "", desc: "日出 Tongariki" },
+        { date: "2026-03-22", time: "09:00", title: "復活節島深度遊 (Day 2)", type: "activity", cost: "", desc: "Rano Raraku 採石場" },
+        { date: "2026-03-23", time: "09:00", title: "復活節島深度遊 (Day 3)", type: "activity", cost: "", desc: "Ana Kakenga 洞穴" },
+        { date: "2026-03-24", time: "14:30", title: "飛回 聖地牙哥 (SCL)", type: "flight", cost: "$1695", desc: "LA842" },
+        { date: "2026-03-25", time: "10:00", title: "聖地牙哥 最後採購", type: "activity", cost: "", desc: "市內休息" },
+
+        // --- 伊瓜蘇 (Iguazu) & 回程 ---
+        { date: "2026-03-26", time: "06:50", title: "飛往 伊瓜蘇 (IGU)", type: "flight", cost: "$874", desc: "【關鍵直航】JetSmart JA780" },
+        { date: "2026-03-27", time: "09:00", title: "巴西側伊瓜蘇 & 鳥園", type: "activity", cost: "", desc: "Iguazu Falls" },
+        { date: "2026-03-28", time: "09:00", title: "過境巴拉圭 (打卡)", type: "activity", cost: "", desc: "下午前往阿根廷側" },
+        { date: "2026-03-29", time: "09:00", title: "阿根廷側伊瓜蘇", type: "activity", cost: "", desc: "魔鬼咽喉步道" },
+        { date: "2026-03-30", time: "09:00", title: "瀑布區加多一日", type: "activity", cost: "", desc: "可選" },
+        { date: "2026-03-31", time: "20:50", title: "飛往 聖保羅 (GRU)", type: "flight", cost: "$786", desc: "G3 1181" },
+        { date: "2026-04-01", time: "10:00", title: "聖保羅 休息", type: "activity", cost: "", desc: "準備回程" },
+        { date: "2026-04-02", time: "21:00", title: "飛往 蒙特利爾 (YUL)", type: "flight", cost: "", desc: "結束 88 天行程" }
     ];
 
-    // 2. 初始化
+    let bookingsData = [
+        { type: "flight", airline: "Aeromexico", code: "AM 363", from: "LTO", to: "MEX", date: "01 Feb", time: "08:25 - 11:45" },
+        { type: "flight", airline: "American", code: "AA 264", from: "MEX", to: "GRU", date: "15 Feb", time: "12:35 - 16:50" },
+        { type: "flight", airline: "LATAM", code: "LA 3886", from: "GRU", to: "CGR", date: "16 Feb", time: "11:35 - 12:20" },
+        { type: "flight", airline: "Azul", code: "AD 4247", from: "CGR", to: "GIG", date: "19 Feb", time: "14:50 - 20:30" },
+        { type: "flight", airline: "Azul", code: "AD 4028", from: "GIG", to: "MAO", date: "23 Feb", time: "09:40 - 15:35" },
+        { type: "flight", airline: "Copa", code: "CM 140", from: "MAO", to: "SJO", date: "01 Mar", time: "03:35 - 08:21" },
+        { type: "flight", airline: "Avianca", code: "AV 647", from: "SJO", to: "UIO", date: "06 Mar", time: "16:45 - 20:05" },
+        { type: "flight", airline: "Avianca", code: "AV 1688", from: "UIO", to: "GPS", date: "08 Mar", time: "11:10 - 12:20" },
+        { type: "flight", airline: "LATAM", code: "LA 1430", from: "GYE", to: "SCL", date: "19 Mar", time: "09:05 - 17:55" },
+        { type: "flight", airline: "LATAM", code: "LA 841", from: "SCL", to: "IPC", date: "20 Mar", time: "08:35 - 12:00" },
+        { type: "flight", airline: "JetSmart", code: "JA 780", from: "SCL", to: "IGU", date: "26 Mar", time: "06:50 - 09:45" },
+        { type: "hotel", name: "Hotel Geneve", loc: "Mexico City", date: "01-06 Feb", desc: "5 Nights" },
+        { type: "hotel", name: "El Santuario", loc: "Valle de Bravo", date: "08-10 Feb", desc: "Luxury Resort" }
+    ];
+
+    // ============================================
+    // 2. 初始化 App
+    // ============================================
+
     function init() {
         generateDateTabs();
         renderItinerary();
+        renderBookings(); // 新增這一行來顯示預訂
     }
 
-    // 生成日期按鈕
+    // 生成日期按鈕 (調整日期範圍至 4月2日)
     function generateDateTabs() {
         const container = document.getElementById('dateTabs');
         container.innerHTML = '';
         const startDate = new Date('2026-01-28');
-        const endDate = new Date('2026-04-02');
+        const endDate = new Date('2026-04-02'); // 更新結束日期
         let curr = startDate;
 
         while (curr <= endDate) {
@@ -270,6 +384,9 @@
             container.appendChild(tab);
             curr.setDate(curr.getDate() + 1);
         }
+        
+        // 預設選中第一天
+        if(container.firstChild) container.firstChild.classList.add('active');
     }
 
     // 渲染行程 (支援新增內容)
@@ -285,9 +402,14 @@
         itineraryData.forEach(item => {
             if (item.date !== lastDate) {
                 const header = document.createElement('div');
-                header.className = 'day-header day-anchor'; // day-anchor 用於定位
+                header.className = 'day-header day-anchor'; 
                 header.id = `date-${item.date}`;
-                header.innerText = item.date;
+                
+                // 顯示星期幾
+                const d = new Date(item.date);
+                const weekDay = d.toLocaleDateString('zh-HK', {weekday: 'short'});
+                
+                header.innerText = `${item.date} (${weekDay})`;
                 container.appendChild(header);
                 lastDate = item.date;
             }
@@ -295,6 +417,7 @@
             let borderClass = 'type-activity';
             if (item.type === 'flight') borderClass = 'type-flight';
             if (item.type === 'stay') borderClass = 'type-stay';
+            if (item.type === 'transport') borderClass = 'type-flight'; // 交通用藍色
 
             const card = document.createElement('div');
             card.className = 'timeline-item';
@@ -309,37 +432,81 @@
             container.appendChild(card);
         });
     }
+    
+    // 渲染預訂 (Flights & Hotels)
+    function renderBookings() {
+        const container = document.getElementById('bookings-page');
+        // 清空除了標題以外的內容 (需保留 html 結構中的 header)
+        // 這裡我們直接用 JS 重建內容比較簡單
+        let html = `
+            <div style="padding: 20px 20px 10px;">
+                <h2 style="margin:0; color:var(--secondary-color);">我的預訂</h2>
+            </div>
+            <div style="display:flex; gap:10px; padding:0 20px 10px;">
+                <span style="background:var(--secondary-color); color:white; padding:6px 12px; border-radius:15px; font-size:13px;">全部</span>
+            </div>
+            <div id="bookings-list" style="padding-bottom:80px;">
+        `;
 
-    // 3. 修正日期跳轉 (精準定位)
+        bookingsData.forEach(item => {
+            if (item.type === 'flight') {
+                html += `
+                <div style="background:white; margin:15px 20px; border-radius:16px; padding:15px; box-shadow:0 2px 8px rgba(0,0,0,0.05); display:flex;">
+                    <div style="flex-grow:1;">
+                        <div style="color:var(--secondary-color); font-weight:bold; margin-bottom:5px;">
+                            <i class="fas fa-plane"></i> ${item.airline} <span style="float:right;">${item.code}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:20px; font-weight:800; color:#333;">
+                            <span>${item.from}</span>
+                            <span style="font-size:12px; color:#ccc;">-------</span>
+                            <span>${item.to}</span>
+                        </div>
+                        <div style="font-size:12px; color:#888; margin-top:5px;">
+                            ${item.date} • ${item.time}
+                        </div>
+                    </div>
+                </div>`;
+            } else {
+                html += `
+                <div style="background:white; margin:15px 20px; border-radius:16px; padding:15px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="color:#9c27b0; font-weight:bold; margin-bottom:5px;">
+                        <i class="fas fa-hotel"></i> ${item.name}
+                    </div>
+                    <div style="font-size:14px;">📍 ${item.loc}</div>
+                    <div style="font-size:12px; color:#888; margin-top:5px;">${item.date} • ${item.desc}</div>
+                </div>`;
+            }
+        });
+        
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    // 修正日期跳轉 (精準定位)
     function scrollToDate(dateStr, tabElement) {
-        // 點擊高亮
         document.querySelectorAll('.date-tab').forEach(t => t.classList.remove('active'));
         if(tabElement) tabElement.classList.add('active');
 
         const element = document.getElementById(`date-${dateStr}`);
         if (element) {
-            // 計算 Header 高度 (動態獲取)
             const headerOffset = 250; 
             const elementPosition = element.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
         } else {
             alert("當天沒有行程！");
         }
     }
 
-    // 4. 新增行程 (+ 號功能)
+    // 新增行程 (+ 號功能)
     function addNewItem() {
-        // 簡單的 Prompt 輸入 (因為沒有後台，這最簡單有效)
         const title = prompt("請輸入活動名稱:", "吃大餐");
         if (!title) return;
         
-        const date = prompt("日期 (YYYY-MM-DD):", "2026-01-28");
+        const date = prompt("日期 (YYYY-MM-DD):", "2026-02-01");
         const time = prompt("時間 (HH:MM):", "19:00");
         const cost = prompt("費用 (選填):", "");
 
-        // 推入資料庫
         itineraryData.push({
             date: date,
             time: time,
@@ -349,39 +516,31 @@
             desc: "新增的項目"
         });
 
-        // 重新渲染
         renderItinerary();
-        
-        // 自動跳轉到新增的那一天
         setTimeout(() => scrollToDate(date), 100);
-        
-        alert("新增成功！(注意：刷新頁面後會消失)");
     }
 
-    // 5. 匯率計算機邏輯
+    // 匯率計算機邏輯
     function calculate() {
         const amount = parseFloat(document.getElementById('calcInput').value) || 0;
         const rate = parseFloat(document.getElementById('currencySelect').value);
         const result = amount * rate;
         
-        // 更新顯示
         document.getElementById('calcResult').innerText = result.toFixed(2);
         
-        // 更新參考匯率文字
         const select = document.getElementById('currencySelect');
-        const curText = select.options[select.selectedIndex].text.split(' ')[1]; // 取得 (MXN)
+        const curText = select.options[select.selectedIndex].text.split(' ')[1];
         document.getElementById('curName').innerText = curText;
         document.getElementById('curRate').innerText = rate;
     }
 
-    // 6. 頁面切換
+    // 頁面切換
     function switchPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId + '-page').classList.add('active');
         
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         
-        // 簡單切換 Active Class
         const icons = document.querySelectorAll('.nav-item');
         if(pageId === 'itinerary') icons[0].classList.add('active');
         if(pageId === 'bookings') icons[1].classList.add('active');
